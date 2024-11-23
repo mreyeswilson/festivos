@@ -24,7 +24,7 @@ const language = {
 };
 
 const getFestivo = () => {
-    const festivo = festivos.find(f => dayjs(f.fecha).isSameOrAfter(today, "day"));
+    const festivo = festivos.find(f => dayjs(f.fecha).isAfter(today, "day"));
     if (!festivo) return null;
 
     return {
@@ -36,7 +36,10 @@ const getFestivo = () => {
 
 const title = "Festivos Colombia " + new Date().getFullYear();
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", update);
+
+
+function update() {
     $("title").innerHTML = title;
     $(".title").innerHTML = title;
     
@@ -44,14 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     $("main span").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("DD [de] MMMM")} - ${nextFextivo.nombre}</span>`;
     
-    new FlipDown(nextFextivo.fecha, {
+    new FlipDown(nextFextivo?.fecha || 0, {
         language,
         headings: ['Días', 'Horas', 'Minutos', 'Segundos'],
-    }).start().ifEnded(() => {
-        nextFextivo = getFestivo();
-    });
-});
-
-
+    }).start().ifEnded(() => update());
+}
 
 
