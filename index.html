@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,34 @@
     <link rel="icon" href="colombia.png" type="image/png">
     <title>Festivos Colombia</title>
     <link href="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/dist/flipdown.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <main class="h-screen w-full flex justify-center items-center flex-col gap-4">
+
+    <main class="h-screen w-full flex justify-center items-center flex-col gap-4 overflow-hidden">
         <h1 class="title text-3xl font-bold"></h1>
-        <span></span>
+        <span class="next-festivo"></span>
         <div id="flipdown" class="flipdown"></div>
     </main>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/src/flipdown.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js" integrity="sha512-FwNWaxyfy2XlEINoSnZh1JQ5TRRtGow0D6XcmAWmYCRgvqOUTnzCxPc9uF35u5ZEpirk1uhlPVA19tflhvnW1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/locale/es.min.js" integrity="sha512-zXA0Z+C+U5x6VWKPRCOQUC+5uPvpCEUM5Cs40sJXPO6Jr9Bd+j+h94eMMDcZOu5bSITZJLD83kW37oZbxGY6PA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/plugin/isSameOrAfter.min.js" integrity="sha512-8gn84sM7ampZwKjmwm8+y8/FpiPbFVgJGqR5Aio1Lx2T08tEvmJQ5ffLWQFnjDkD/c4kzxebsVtJFswTIvvT+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js"
+        integrity="sha512-FwNWaxyfy2XlEINoSnZh1JQ5TRRtGow0D6XcmAWmYCRgvqOUTnzCxPc9uF35u5ZEpirk1uhlPVA19tflhvnW1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/locale/es.min.js"
+        integrity="sha512-zXA0Z+C+U5x6VWKPRCOQUC+5uPvpCEUM5Cs40sJXPO6Jr9Bd+j+h94eMMDcZOu5bSITZJLD83kW37oZbxGY6PA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/plugin/isSameOrAfter.min.js"
+        integrity="sha512-8gn84sM7ampZwKjmwm8+y8/FpiPbFVgJGqR5Aio1Lx2T08tEvmJQ5ffLWQFnjDkD/c4kzxebsVtJFswTIvvT+g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--
+    - ionicon link
+  -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="script.js" type="module"></script>
 </body>
+
 </html>

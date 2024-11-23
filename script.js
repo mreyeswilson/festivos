@@ -1,4 +1,4 @@
-import festivos from "./festivos.json" with {type: "json"}
+import festivos from "./festivos.json" with { type: "json" };
 
 
 dayjs.extend(dayjs_plugin_isSameOrAfter)
@@ -42,15 +42,35 @@ document.addEventListener("DOMContentLoaded", update);
 function update() {
     $("title").innerHTML = title;
     $(".title").innerHTML = title;
+    $("#flipdown").innerHTML = ""
     
     let nextFextivo = getFestivo();
 
-    $("main span").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("DD [de] MMMM")} - ${nextFextivo.nombre}</span>`;
+    if (!nextFextivo) 
+        nextFextivo = {
+            fecha: 0,
+            nombre: ""
+        }
     
-    new FlipDown(nextFextivo?.fecha || 0, {
+
+    $(".next-festivo").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("DD [de] MMMM")} - ${nextFextivo?.nombre}</span>`;
+
+    new FlipDown(nextFextivo.fecha, {
         language,
         headings: ['Días', 'Horas', 'Minutos', 'Segundos'],
-    }).start().ifEnded(() => update());
+    }).start().ifEnded(() => {
+       location.reload()
+    })
 }
+
+// notification toast variables
+const notificationToast = $('[data-toast]');
+const toastCloseBtn = $('[data-toast-close]');
+
+// notification toast eventListener
+toastCloseBtn.addEventListener('click', function () {
+  notificationToast.classList.add('closed');
+});
+
 
 
