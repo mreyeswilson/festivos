@@ -53,7 +53,7 @@ function update() {
         }
     
 
-    $(".next-festivo").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("DD [de] MMMM")} - ${nextFextivo?.nombre}</span>`;
+    $(".next-festivo").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("dddd, DD [de] MMMM")} - ${nextFextivo?.nombre}</span>`;
 
     new FlipDown(nextFextivo.fecha, {
         language,
@@ -62,15 +62,6 @@ function update() {
        location.reload()
     })
 }
-
-// notification toast variables
-const notificationToast = $('[data-toast]');
-const toastCloseBtn = $('[data-toast-close]');
-
-// notification toast eventListener
-toastCloseBtn.addEventListener('click', function () {
-  notificationToast.classList.add('closed');
-});
 
 
 
