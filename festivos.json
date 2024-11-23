@@ -1,0 +1,21 @@
+[
+    {"nombre": "Año Nuevo", "fecha": "2024-01-01"},
+    {"nombre": "Epifanía", "fecha": "2024-01-08"},
+    {"nombre": "Día de San José", "fecha": "2024-03-25"},
+    {"nombre": "Jueves Santo", "fecha": "2024-03-28"},
+    {"nombre": "Viernes Santo", "fecha": "2024-03-29"},
+    {"nombre": "Día del trabajo", "fecha": "2024-05-01"},
+    {"nombre": "Ascensión de Jesús", "fecha": "2024-05-13"},
+    {"nombre": "Corpus Christi", "fecha": "2024-06-03"},
+    {"nombre": "Sagrado Corazón de Jesús", "fecha": "2024-06-10"},
+    {"nombre": "San Pedro y San Pablo", "fecha": "2024-07-01"},
+    {"nombre": "Día de la independencia", "fecha": "2024-07-20"},
+    {"nombre": "Batalla de Boyacá", "fecha": "2024-08-07"},
+    {"nombre": "Asunción de la Virgen", "fecha": "2024-08-19"},
+    {"nombre": "Día de la Diversidad Étnica y Cultural", "fecha": "2024-10-14"},
+    {"nombre": "Todos los Santos", "fecha": "2024-11-04"},
+    {"nombre": "Independencia de Cartagena", "fecha": "2024-11-11"},
+    {"nombre": "Prueba", "fecha": "2024-11-23"},
+    {"nombre": "Inmaculada Concepción", "fecha": "2024-12-08"},
+    {"nombre": "Navidad", "fecha": "2024-12-25"}
+  ]
