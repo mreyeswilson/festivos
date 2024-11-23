@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let nextFextivo = getFestivo();
 
-    $("main span").innerHTML = `<span class="text-red-800"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("DD [de] MMMM")} - ${nextFextivo.nombre}</span>`;
+    $("main span").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("DD [de] MMMM")} - ${nextFextivo.nombre}</span>`;
     
     new FlipDown(nextFextivo.fecha, {
         language,
