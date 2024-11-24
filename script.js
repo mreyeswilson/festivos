@@ -53,7 +53,12 @@ function update() {
         }
     
 
-    $(".next-festivo").innerHTML = `<span class="text-red-500"><b class="text-black">Próximo festivo:</b> ${dayjs(nextFextivo.fecha * 1000).format("dddd, DD [de] MMMM")} - ${nextFextivo?.nombre}</span>`;
+    $(".next-festivo").innerHTML = `
+    <div class="text-left w-full">
+        <b class="block w-full text-black">Próximo festivo:</b> 
+        <span class="text-sm text-red-500">${dayjs(nextFextivo.fecha * 1000).format("dddd, DD [de] MMMM")} - ${nextFextivo?.nombre}</span>
+    <div>
+    `;
 
     new FlipDown(nextFextivo.fecha, {
         language,
