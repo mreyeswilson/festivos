@@ -1,5 +1,5 @@
+import { throwConffeti } from "./confetti.js";
 import festivos from "./festivos.json" with { type: "json" };
-
 
 dayjs.extend(dayjs_plugin_isSameOrAfter)
 dayjs.locale('es');
@@ -50,6 +50,7 @@ const title = "Festivos Colombia " + new Date().getFullYear();
 document.addEventListener("DOMContentLoaded", update);
 
 function update() {
+
     const loader = $("#loader")
     getData().then((data) => {
         $("title").innerHTML = title;
@@ -76,6 +77,10 @@ function update() {
         })
 
         loader.classList.add("hidden")
+
+        const isToday = data.find(f => f.fecha.isSame(today, "day"))
+
+        if (isToday) throwConffeti()
     })
 
     
