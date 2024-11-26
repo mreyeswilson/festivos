@@ -62,10 +62,17 @@ function update() {
         $("#flipdown").innerHTML = ""
 
         
-        let {fecha, motivo} = data.find(f => f.fecha.isAfter(today, "day"));
+        let {fecha: fecha2, motivo: motivo2} = data.filter(f => f.fecha.isBefore(today, "day"))?.sort((a, b) => b.fecha - a.fecha)[0] ?? data[0]
+        
+        
+        let {fecha, motivo} = data.find(f => f.fecha.isAfter(today, "day"))
+
     
         $(".next-festivo").innerHTML = `
-        <div class="text-left w-full">
+        <div class="text-left min-w-full">
+            <b class="block w-full text-black">Último festivo:</b> 
+            <span class="text-sm text-red-500">${fecha2.format("dddd, DD [de] MMMM")} - ${motivo2}</span>
+
             <b class="block w-full text-black">Próximo festivo:</b> 
             <span class="text-sm text-red-500">${fecha.format("dddd, DD [de] MMMM")} - ${motivo}</span>
         <div>
