@@ -25,13 +25,17 @@ const language = {
 
 const url = "https://script.googleusercontent.com/macros/echo?user_content_key=YpLUABsxjjIoutlloQp-OEYdDINDfZG5ywOBNflEgNeBHf1QMM70i1i8Ai6YIFP7z9BQkV5SLEN6G2N2AoXr4MLuoYUhqa-fm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnMSk1hKidNPigzJD4VOywdWCAEAFGvgXH3IHta_Hv2_FLqzCk1VN72P5bIwK08l-mGOi-uRIrT1Rsa1D_gtQU_VKdYxk-bn_mNz9Jw9Md8uu&lib=MZj75W6tlZ-AOX3FuhBPRx0_xGF0snHn-"
 const getData = () => new Promise(async (resolve, reject) => {
-    const res = await fetch(url)
-    const data = await res.json()
-    resolve(data.map((item) => ({
-        fecha: dayjs(item.Fecha),
-        motivo: item.Motivo,
-        dow: item.DOW,
-    })))
+    try {
+        const res = await fetch(url)
+        const data = await res.json()
+        resolve(data.map((item) => ({
+            fecha: dayjs(item.Fecha),
+            motivo: item.Motivo,
+            dow: item.DOW,
+        })))
+    } catch (error) {
+        reject(error)
+    }
 })
 
 const getFestivo = () => {
