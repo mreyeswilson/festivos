@@ -8,11 +8,18 @@
     <link rel="icon" href="colombia.png" type="image/png">
     <title>Festivos Colombia</title>
     <link href="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/dist/flipdown.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
+    <div id="loader" class="absolute w-full h-screen flex justify-center items-center top-0 left-0 bg-white/30 z-10">
+        <div class="flex flex-col items-center justify-center text-gray-600/80 gap-4">
+            <i class="fa-solid fa-circle-notch text-6xl animate-spin "></i>
+            <span>Cargando información, por favor espere...</span>
+        </div>
+    </div>
     <main class="h-screen w-full flex justify-center items-center flex-col gap-4 overflow-hidden">
         <h1 class="title text-3xl font-bold"></h1>
         <span class="next-festivo"></span>
