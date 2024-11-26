@@ -85,6 +85,8 @@ function update() {
         const isToday = data.find(f => f.fecha.isSame(today, "day"))
 
         if (isToday) throwConffeti()
+    }).catch((error) => {
+        console.log(error)
     })
 
     
