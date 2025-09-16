@@ -52,7 +52,7 @@ const title = "Festivos Colombia " + new Date().getFullYear();
 
 document.addEventListener("DOMContentLoaded", () => {
     update();
-    createParticles();
+    initParticlesJS();
 });
 
 function update() {
@@ -147,6 +147,7 @@ function generateTimeline(festivosData) {
 
         timelineItem.innerHTML = `
             <div class="timeline-card">
+                <span class="timeline-card-pointer" aria-hidden="true"></span>
                 <div class="timeline-date">${fecha.format('DD MMM')}</div>
                 <div class="timeline-event">${motivo}</div>
                 <span class="timeline-status status-${status}">${statusText}</span>
@@ -207,53 +208,41 @@ function updateSelectedCard(selectedItem) {
     selectedItem.classList.add('selected');
 }
 
-// Función para crear partículas flotantes
-function createParticles() {
-    const particlesContainer = $("#particles-container");
-    const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 15 : 25;
+// Inicializa particles.js sobre el contenedor existente
+function initParticlesJS() {
+    const containerId = 'particles-container';
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
-    // Crear partículas iniciales
-    for (let i = 0; i < particleCount; i++) {
-        createParticle();
+    // Asegura que la lib esté cargada
+    if (typeof window.particlesJS !== 'function') {
+        // reintenta brevemente por si carga lenta del CDN
+        setTimeout(initParticlesJS, 100);
+        return;
     }
 
-    // Crear nuevas partículas cada cierto tiempo
-    setInterval(() => {
-        createParticle();
-    }, isMobile ? 3000 : 2000);
+    window.particlesJS(containerId, {
+        particles: {
+            number: { value: window.innerWidth < 768 ? 60 : 120, density: { enable: true, value_area: 900 } },
+            color: { value: ["#ffffff", "#a3bffa", "#7aa2ff"] },
+            shape: { type: "circle" },
+            opacity: { value: 0.4, random: true },
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 140, color: "#a3bffa", opacity: 0.2, width: 1 },
+            move: { enable: true, speed: 1.4, direction: "none", random: false, straight: false, out_mode: "out" }
+        },
+        interactivity: {
+            detect_on: "window",
+            events: {
+                onhover: { enable: true, mode: "grab" },
+                onclick: { enable: true, mode: "repulse" },
+                resize: true
+            },
+            modes: {
+                grab: { distance: 160, line_linked: { opacity: 0.35 } },
+                repulse: { distance: 180, duration: 0.4 }
+            }
+        },
+        retina_detect: true
+    });
 }
-
-function createParticle() {
-    const particlesContainer = $("#particles-container");
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-
-    // Tamaño aleatorio de la partícula
-    const size = Math.random() * 8 + 2; // 2px a 10px
-    particle.style.width = size + 'px';
-    particle.style.height = size + 'px';
-
-    // Posición horizontal aleatoria
-    particle.style.left = Math.random() * 100 + '%';
-
-    // Duración aleatoria de la animación
-    const duration = Math.random() * 15 + 10; // 10s a 25s
-    particle.style.animationDuration = duration + 's';
-
-    // Delay aleatorio
-    const delay = Math.random() * 5;
-    particle.style.animationDelay = delay + 's';
-
-    // Añadir al contenedor
-    particlesContainer.appendChild(particle);
-
-    // Remover la partícula después de completar la animación
-    setTimeout(() => {
-        if (particle.parentNode) {
-            particle.parentNode.removeChild(particle);
-        }
-    }, (duration + delay) * 1000);
-}
-
-
