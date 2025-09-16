@@ -1,12 +1,11 @@
 import { throwConffeti } from "./confetti.js";
-import festivos from "./festivos.json" with { type: "json" };
 
 dayjs.extend(dayjs_plugin_isSameOrAfter)
 dayjs.locale('es');
 
 /**
- * 
- * @param {string} selector 
+ *
+ * @param {string} selector
  * @returns {Element | null}
  */
 const $ = (selector) => document.querySelector(selector);
@@ -15,7 +14,7 @@ const today = dayjs();
 const language = {
     days: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], // Días de la semana en español
     months: [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ], // Meses del año en español
     countdownTitle: '¡Cuenta regresiva hasta el festivo!',
@@ -51,53 +50,210 @@ const getFestivo = () => {
 
 const title = "Festivos Colombia " + new Date().getFullYear();
 
-document.addEventListener("DOMContentLoaded", update);
+document.addEventListener("DOMContentLoaded", () => {
+    update();
+    createParticles();
+});
 
 function update() {
 
     const loader = $("#loader")
     getData().then((data) => {
-        $("title").innerHTML = title;
-        $(".title").innerHTML = title;
-        $("#flipdown").innerHTML = ""
-
-        
-        let {fecha: fecha2, motivo: motivo2} = data.filter(f => f.fecha.isBefore(today, "day"))?.sort((a, b) => b.fecha - a.fecha)[0] ?? data[0]
-        
-        
         let {fecha, motivo} = data.find(f => f.fecha.isAfter(today, "day"))
 
-    
-        $(".next-festivo").innerHTML = `
-        <div class="text-left min-w-full">
-            <b class="block w-full text-black">Último festivo:</b> 
-            <span class="text-sm text-red-500">${fecha2.format("dddd, DD [de] MMMM")} - ${motivo2}</span>
+        // Actualizar título con el próximo festivo
+        const festivoTitle = `${motivo} - ${fecha.format('DD [de] MMMM')}`;
+        $("title").innerHTML = festivoTitle;
+        $(".title").innerHTML = festivoTitle;
+        $("#flipdown").innerHTML = ""
 
-            <b class="block w-full text-black">Próximo festivo:</b> 
-            <span class="text-sm text-red-500">${fecha.format("dddd, DD [de] MMMM")} - ${motivo}</span>
-        <div>
-        `;
 
-        const milliseconds = fecha.valueOf() / 1000 ?? 0;
-    
-        new FlipDown(milliseconds, {
+        const milliseconds = Math.floor(fecha.valueOf() / 1000);
+
+        currentFlipDown = new FlipDown(milliseconds, {
             language,
             headings: ['Días', 'Horas', 'Minutos', 'Segundos'],
-        }).start().ifEnded(() => {
-           location.reload()
-        })
+        });
+
+        currentFlipDown.start().ifEnded(() => {
+           location.reload();
+        });
 
         loader.classList.add("hidden")
 
         const isToday = data.find(f => f.fecha.isSame(today, "day"))
 
         if (isToday) throwConffeti()
+
+        // Generar línea de tiempo
+        generateTimeline(data)
     }).catch((error) => {
         console.log(error)
     })
-
-    
 }
 
+// Función para generar la línea de tiempo
+function generateTimeline(festivosData) {
+    const timelineContainer = $("#timeline");
+
+    // Ordenar los festivos por fecha
+    const festivosOrdenados = festivosData.sort((a, b) => a.fecha - b.fecha);
+
+    // Obtener 2 festivos pasados y 3 próximos
+    const festivosPasados = festivosOrdenados.filter(f => f.fecha.isBefore(today, 'day')).slice(-2);
+    const festivosFuturos = festivosOrdenados.filter(f => f.fecha.isSameOrAfter(today, 'day')).slice(0, 3);
+
+    const festivosSeleccionados = [...festivosPasados, ...festivosFuturos];
+
+    // Limpiar contenedor
+    timelineContainer.innerHTML = "";
+
+    festivosSeleccionados.forEach((festivo, index) => {
+        const { fecha, motivo } = festivo;
+
+        // Determinar el estado del festivo
+        let status = 'future';
+        let statusText = 'Próximo';
+        let dotClass = 'future';
+
+        if (fecha.isBefore(today, 'day')) {
+            status = 'past';
+            statusText = 'Pasado';
+            dotClass = 'past';
+        } else if (fecha.isSame(today, 'day')) {
+            status = 'current';
+            statusText = 'Hoy';
+            dotClass = 'current';
+        }
+
+        // Crear elemento de la línea de tiempo
+        const timelineItem = document.createElement('div');
+        timelineItem.className = 'timeline-item';
+        timelineItem.style.setProperty('--index', index);
+
+        // Añadir clase especial a la tarjeta del medio (índice 2)
+        if (index === 2) {
+            timelineItem.classList.add('middle-item');
+        }
+
+        // Hacer clickeables las tarjetas futuras
+        if (status === 'future' || status === 'current') {
+            timelineItem.classList.add('clickeable');
+            timelineItem.addEventListener('click', () => {
+                updateFlipDownAndTitle(festivo);
+                updateSelectedCard(timelineItem);
+            });
+        }
+
+        timelineItem.innerHTML = `
+            <div class="timeline-card">
+                <div class="timeline-date">${fecha.format('DD MMM')}</div>
+                <div class="timeline-event">${motivo}</div>
+                <span class="timeline-status status-${status}">${statusText}</span>
+            </div>
+            <div class="timeline-dot ${dotClass}"></div>
+        `;
+
+        timelineContainer.appendChild(timelineItem);
+    });
+}
+
+// Variable global para almacenar el FlipDown actual
+let currentFlipDown = null;
+
+// Función para actualizar FlipDown y título
+function updateFlipDownAndTitle(festivo) {
+    const { fecha, motivo } = festivo;
+
+    // Actualizar el título
+    const newTitle = `${motivo} - ${fecha.format('DD [de] MMMM')}`;
+    $(".title").innerHTML = newTitle;
+    $("title").innerHTML = newTitle;
+
+    // Limpiar el contenedor del FlipDown
+    $("#flipdown").innerHTML = "";
+
+    // Crear nuevo FlipDown
+    const milliseconds = Math.floor(fecha.valueOf() / 1000);
+
+    // Destruir el FlipDown anterior si existe
+    if (currentFlipDown) {
+        try {
+            currentFlipDown.destroy();
+        } catch (e) {
+            // Ignorar errores de destrucción
+        }
+    }
+
+    // Crear nuevo FlipDown
+    currentFlipDown = new FlipDown(milliseconds, {
+        language,
+        headings: ['Días', 'Horas', 'Minutos', 'Segundos'],
+    });
+
+    currentFlipDown.start().ifEnded(() => {
+        location.reload();
+    });
+}
+
+// Función para actualizar la tarjeta seleccionada
+function updateSelectedCard(selectedItem) {
+    // Remover clase selected de todas las tarjetas
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    // Añadir clase selected a la tarjeta clickeada
+    selectedItem.classList.add('selected');
+}
+
+// Función para crear partículas flotantes
+function createParticles() {
+    const particlesContainer = $("#particles-container");
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 15 : 25;
+
+    // Crear partículas iniciales
+    for (let i = 0; i < particleCount; i++) {
+        createParticle();
+    }
+
+    // Crear nuevas partículas cada cierto tiempo
+    setInterval(() => {
+        createParticle();
+    }, isMobile ? 3000 : 2000);
+}
+
+function createParticle() {
+    const particlesContainer = $("#particles-container");
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+
+    // Tamaño aleatorio de la partícula
+    const size = Math.random() * 8 + 2; // 2px a 10px
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+
+    // Posición horizontal aleatoria
+    particle.style.left = Math.random() * 100 + '%';
+
+    // Duración aleatoria de la animación
+    const duration = Math.random() * 15 + 10; // 10s a 25s
+    particle.style.animationDuration = duration + 's';
+
+    // Delay aleatorio
+    const delay = Math.random() * 5;
+    particle.style.animationDelay = delay + 's';
+
+    // Añadir al contenedor
+    particlesContainer.appendChild(particle);
+
+    // Remover la partícula después de completar la animación
+    setTimeout(() => {
+        if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+        }
+    }, (duration + delay) * 1000);
+}
 
 
